@@ -1,59 +1,38 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8" />
-  <title>Klaim Hadiah!</title>
+  <meta charset="UTF-8">
+  <title>Cek Lokasi Kamu</title>
   <style>
     body {
-      margin: 0;
-      background: white;
-      text-align: center;
       font-family: sans-serif;
-    }
-    .center {
-      margin-top: 100px;
-    }
-    button {
-      padding: 15px 30px;
-      font-size: 20px;
-      background-color: #28a745;
-      color: white;
-      border: none;
-      border-radius: 10px;
-      cursor: pointer;
-    }
-    #jumpscare {
-      display: none;
-      position: fixed;
-      top: 0; left: 0;
-      width: 100vw; height: 100vh;
-      background: black;
-      justify-content: center;
-      align-items: center;
-      z-index: 9999;
-    }
-    #jumpscare img {
-      max-width: 100%;
-      max-height: 100%;
+      text-align: center;
+      padding-top: 50px;
     }
   </style>
 </head>
 <body>
-  <div class="center">
-    <h1>Selamat! Kamu Menang Hadiah iPhone 15!</h1>
-    <p>Klik tombol di bawah untuk klaim sekarang.</p>
-    <button onclick="showJumpscare()">Klaim Hadiah</button>
-  </div>
-
-  <div id="jumpscare">
-    <img src="https://i.imgur.com/frRJqjX.png" alt="Hantu">
-  </div>
+  <h1>Menentukan Lokasi Kamu...</h1>
+  <p id="status">Meminta izin lokasi...</p>
+  <p id="lokasi"></p>
 
   <script>
-    function showJumpscare() {
-      var scream = new Audio("https://www.myinstants.com/media/sounds/movie_1.mp3");
-      scream.play();
-      document.getElementById("jumpscare").style.display = "flex";
+    if ("geolocation" in navigator) {
+      navigator.geolocation.getCurrentPosition(
+        function(position) {
+          const lat = position.coords.latitude;
+          const lon = position.coords.longitude;
+          document.getElementById("status").innerText = "Lokasi berhasil diperoleh:";
+          document.getElementById("lokasi").innerText = `Latitude: ${lat}, Longitude: ${lon}`;
+          // Kamu bisa kirim data ini ke server kalau mau
+        },
+        function(error) {
+          document.getElementById("status").innerText = "Gagal mendapatkan lokasi!";
+          console.error(error);
+        }
+      );
+    } else {
+      document.getElementById("status").innerText = "Browser tidak mendukung geolokasi.";
     }
   </script>
 </body>
